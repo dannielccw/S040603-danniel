@@ -12,6 +12,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class MyDataHandler extends DefaultHandler {
     boolean isTitle = false;
+    boolean inItem = false;
 
     @Override
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -19,6 +20,10 @@ public class MyDataHandler extends DefaultHandler {
         if (qName.equals("title"))
         {
             isTitle = true;
+        }
+        if (qName.equals("item"))
+        {
+            inItem = true;
         }
     }
 
@@ -29,13 +34,16 @@ public class MyDataHandler extends DefaultHandler {
         {
             isTitle = false;
         }
-
+        if (qName.equals("item"))
+        {
+            inItem = false;
+        }
     }
 
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         super.characters(ch, start, length);
-        if (isTitle)
+        if (isTitle && inItem)
         {
             String str = new String(ch).substring(start, length);
             Log.d("TITLE", str);
