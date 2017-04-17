@@ -10,9 +10,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.yvtc.s040603_danniel.MainActivity">
 
-    <TextView
+    <ListView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        android:id="@+id/textView" />
+        android:layout_height="match_parent"
+        android:id="@+id/listView"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
