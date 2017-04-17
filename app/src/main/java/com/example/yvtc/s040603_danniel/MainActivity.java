@@ -6,16 +6,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 public class MainActivity extends AppCompatActivity {
     InputStream inputStream;
+    MyDataHandler dataHandler;
 
     TextView tv;
     @Override
@@ -23,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tv = (TextView) findViewById(R.id.textView);
+        dataHandler = new MyDataHandler();
 
         new Thread(){
             @Override
@@ -43,6 +54,14 @@ public class MainActivity extends AppCompatActivity {
                         sb.append(str);
                     }
                     Log.d("MYNETLog", sb.toString());
+
+                    SAXParserFactory spf = SAXParserFactory.newInstance();
+                    SAXParser sp = spf.newSAXParser();
+                    XMLReader xr = sp.getXMLReader();
+                    xr.setContentHandler(dataHandler);
+                    xr.parse(new InputSource(new StringReader(sb.toString())));
+
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -55,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
+                    e.printStackTrace();
+
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                } catch (SAXException e) {
                     e.printStackTrace();
                 }
 
